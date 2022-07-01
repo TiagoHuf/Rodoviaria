@@ -97,6 +97,8 @@ public class Rodoviaria {
                 "   | |  __  |.'.-.' |   _   |   _   |    |.'.-.'.  |  __  |'__  =='\n" +
                 "   '---------'|( )|'----------------------'|( )|'----------''-----'\n" +
                 "               '-'                          '-''\n" + reset);
+
+        System.out.println(String.format("%06d", 1));
     }
 
     public static void Sleep() {
