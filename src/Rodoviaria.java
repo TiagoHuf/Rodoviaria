@@ -282,10 +282,10 @@ public class Rodoviaria {
         int choice = 0;
         choice = SeatChoice(bus);
         try {
-            if (bus[choice] == "AR") {
+            if (bus[choice].contains("AR")) {
                 Error(2);
                 return;
-            } else if (bus[choice] == "AV") {
+            } else if (bus[choice].contains("AV")) {
                 Error(3);
                 return;
             } else {
@@ -302,10 +302,10 @@ public class Rodoviaria {
         int choice = 0;
         choice = SeatChoice(bus);
         try {
-            if (bus[choice] == "AR") {
+            if (bus[choice].contains("AR")) {
                 Error(2);
                 return;
-            } else if (bus[choice] == "AV") {
+            } else if (bus[choice].contains("AV")) {
                 Error(3);
                 return;
             } else {
@@ -640,13 +640,13 @@ public class Rodoviaria {
         String reset = "\u001B[0m";
 
         System.out.println(red +
-                "   __    _                                  _                    _                              _ _     _         _ \n"
+                "     __    _                                  _                    _                              _ _     _         _ \n"
                 +
                 "    /__\\__| |_ ___    __ _ ___ ___  ___ _ __ | |_ ___     ___  ___| |_ __ _  __   _____ _ __   __| (_) __| | ___   / \\ \n"
                 +
                 "   /_\\/ __| __/ _ \\  / _` / __/ __|/ _ \\ '_ \\| __/ _ \\   / _ \\/ __| __/ _` | \\ \\ / / _ \\ '_ \\ / _` | |/ _` |/ _ \\ /  /\n"
                 +
-                "  //__\\__ \\ ||  __/ | (_| \\__ \\__ \\  __/ | | | || (_) | |  __/\\__ \\ || (_| |  \\ | | (_| | | (_| | (_) /\\_/ \n"
+                "  //__\\__ \\ ||  __/ | (_| \\__ \\__ \\  __/ | | | || (_) | |  __/\\__ \\ || (_| |  \\ V /  __/ | | | (_| | | (_| | (_) /\\_/ \n"
                 +
                 "  \\__/|___/\\__\\___|  \\__,_|___/___/\\___|_| |_|\\__\\___/   \\___||___/\\__\\__,_|   \\_/ \\___|_| |_|\\__,_|_|\\__,_|\\___/\\/   \n"
                 + reset);
