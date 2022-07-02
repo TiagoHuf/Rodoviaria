@@ -1,16 +1,41 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.util.Scanner;
 
 public class Rodoviaria {
     public static void main(String[] args) {
+        File archiveA = new File("C:/Users/tiago/Desktop/Projeto Ônibus/src/Onibus/BusA.txt");
+        File archiveB = new File("C:/Users/tiago/Desktop/Projeto Ônibus/src/Onibus/BusB.txt");
+
         String[] busA = new String[44];
         String[] busB = new String[44];
-        FillVetor(busA);
-        FillVetor(busB);
+
+        try {
+            if (!archiveA.exists()) {
+                FillVetor(busA);
+                archiveA.createNewFile();
+            }
+
+            if (!archiveB.exists()) {
+                FillVetor(busB);
+                archiveB.createNewFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        MyFileReader(busA, archiveA);
+        MyFileReader(busB, archiveB);
 
         Logo();
 
         Menu(busA, busB);
 
+        MyFileWriter(busA, archiveA);
+        MyFileWriter(busB, archiveB);
     }
 
     public static void Menu(String[] busA, String[] busB) {
@@ -34,7 +59,6 @@ public class Rodoviaria {
                         break;
                     case 3:
                         Cancel(busA, busB);
-                        CancelSucess();
                         break;
                     case 4:
                         int busChoice = Choice();
@@ -52,7 +76,7 @@ public class Rodoviaria {
 
             } catch (Exception e) {
                 ClearConsole();
-                System.out.println("Informe apenas o número da opção!");
+                MenuChoiceError();
                 scanner.next();
                 Sleep();
             }
@@ -61,6 +85,39 @@ public class Rodoviaria {
 
         } while (choiceMenu != 0);
         scanner.close();
+    }
+
+    public static void MyFileReader(String[] bus, File archive) {
+        try {
+            FileReader fr = new FileReader(archive);
+            BufferedReader br = new BufferedReader(fr);
+
+            for (int i = 0; i < bus.length; i++) {
+                bus[i] = br.readLine();
+            }
+
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void MyFileWriter(String[] bus, File archive) {
+        try {
+            FileWriter fw = new FileWriter(archive, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (int i = 0; i < bus.length; i++) {
+                bw.write(bus[i]);
+                bw.newLine();
+            }
+
+            bw.close();
+            fw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void ClearConsole() {
@@ -183,9 +240,9 @@ public class Rodoviaria {
 
         for (int i = 0; i < 44; i++) {
 
-            if (bus[i] == "AV")
+            if (bus[i].contains("AV"))
                 System.out.print("[" + blue);
-            else if (bus[i] == "AR")
+            else if (bus[i].contains("AR"))
                 System.out.print("[" + red);
             else
                 System.out.print("[" + green);
@@ -244,27 +301,33 @@ public class Rodoviaria {
     public static void SeatSell(String[] bus) {
         int choice = 0;
         choice = SeatChoice(bus);
-        if (bus[choice] == "AR") {
-            Error(2);
-            return;
-        } else if (bus[choice] == "AV") {
-            Error(3);
-            return;
-        } else {
-            try {
+        try {
+            if (bus[choice] == "AR") {
+                Error(2);
+                return;
+            } else if (bus[choice] == "AV") {
+                Error(3);
+                return;
+            } else {
                 bus[choice] = "AV";
                 ReservationSuccess();
-            } catch (Exception e) {
-                Error(4);
-                return;
             }
+        } catch (Exception e) {
+            Error(4);
+            return;
         }
     }
 
     public static void ReserveCancel(String[] bus) {
         int choice = 0;
         choice = SeatChoice(bus);
-        bus[choice] = (String.format("%02d", choice));
+        try {
+            bus[choice] = (String.format("%02d", choice));
+            CancelSucess();
+        } catch (Exception e) {
+            Error(4);
+            return;
+        }
     }
 
     public static int Choice() {
@@ -621,6 +684,28 @@ public class Rodoviaria {
                 "  //__\\__ \\ (_| (_) | | | | | (_| | |  __/ | | | |_| | |  __/ | |_| | |  __/ |__   _|__   _/\\_/ \n"
                 +
                 "  \\__/|___/\\___\\___/|_|_| |_|\\__,_|  \\___|_| |_|\\__|_|  \\___|  \\___/   \\___|    |_|    |_| \\/   \n"
+                + reset);
+
+        Sleep();
+    }
+
+    public static void MenuChoiceError() {
+        ClearConsole();
+        String red = "\u001B[35m";
+        String reset = "\u001B[0m";
+
+        System.out.println(red +
+                "    _____        __                                                                                                                   _                                       _ \n"
+                +
+                "    \\_   \\_ __  / _| ___  _ __ _ __ ___   ___    __ _ _ __   ___ _ __   __ _ ___    ___    _ __  _   _ _ __ ___   ___ _ __ ___     __| | __ _    ___  _ __   ___ __ _  ___   / \\ \n"
+                +
+                "     / /\\/ '_ \\| |_ / _ \\| '__| '_ ` _ \\ / _ \\  / _` | '_ \\ / _ \\ '_ \\ / _` / __|  / _ \\  | '_ \\| | | | '_ ` _ \\ / _ \\ '__/ _ \\   / _` |/ _` |  / _ \\| '_ \\ / __/ _` |/ _ \\ /  /\n"
+                +
+                "  /\\/ /_ | | | |  _| (_) | |  | | | | | |  __/ | (_| | |_) |  __/ | | | (_| \\__ \\ | (_) | | | | | |_| | | | | | |  __/ | | (_) | | (_| | (_| | | (_) | |_) | (_| (_| | (_) /\\_/ \n"
+                +
+                "  \\____/ |_| |_|_|  \\___/|_|  |_| |_| |_|\\___|  \\__,_| .__/ \\___|_| |_|\\__,_|___/  \\___/  |_| |_|\\__,_|_| |_| |_|\\___|_|  \\___/   \\__,_|\\__,_|  \\___/| .__/ \\___\\__,_|\\___/\\/   \n"
+                +
+                "                                                     |_|                                                                                             |_|                       \n"
                 + reset);
 
         Sleep();
